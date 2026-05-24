@@ -4,10 +4,7 @@ import matplotlib.pyplot as plt
 import joblib
 
 # page config
-st.set_page_config(
-    page_title="Customer Churn Predictor",
-    layout="wide"
-)
+st.set_page_config(page_title="Customer Churn Predictor", layout="wide")
 
 # load model
 @st.cache_resource
@@ -31,8 +28,7 @@ LOW_RISK_PROFILE = {
     "online_backup": "Yes",
     "device_protection": "Yes",
     "tech_support": "Yes",
-    "streaming_tv": "Yes",
-    "streaming_movies": "Yes",
+    "has_streaming": "Yes",
     "monthly_charges": 55.0,
     "total_charges": 2640.0,
     "gender": "Male",
@@ -102,45 +98,78 @@ st.divider()
 
 col1, col2, col3 = st.columns(3)
 
+# Section 1: Account Info
+st.subheader("Account Info")
+
+tenure = st.slider("Tenure (months)", 0, 72, st.session_state["tenure"])
+
+col1, col2, col3 = st.columns(3)
+
 with col1:
-    st.subheader("Account Info")
-    tenure = st.slider("Tenure (months)", 0, 72, st.session_state["tenure"])
     contract = st.selectbox(
         "Contract Type",
         ["Month-to-month", "One year", "Two year"],
         index=["Month-to-month", "One year", "Two year"].index(st.session_state["contract"])
     )
+with col2:
     paperless_billing = st.selectbox(
         "Paperless Billing", ["Yes", "No"],
         index=["Yes", "No"].index(st.session_state["paperless_billing"])
     )
+with col3:
     payment_method = st.selectbox(
         "Payment Method",
-        ["Electronic check", "Mailed check",
-         "Bank transfer (automatic)", "Credit card (automatic)"],
-        index=["Electronic check", "Mailed check",
-               "Bank transfer (automatic)", "Credit card (automatic)"].index(
-                   st.session_state["payment_method"])
+        ["Electronic check", "Mailed check", "Bank transfer (automatic)", "Credit card (automatic)"],
+        index=["Electronic check", "Mailed check", "Bank transfer (automatic)", "Credit card (automatic)"].index(
+            st.session_state["payment_method"])
     )
 
+# Section 2: Billing
+st.markdown(" ")
+st.subheader("Billing")
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    monthly_charges = st.number_input(
+        "Monthly Charges ($)", min_value=0.0, max_value=200.0,
+        value=float(st.session_state["monthly_charges"])
+    )
 with col2:
-    st.subheader("Services")
+    total_charges = st.number_input(
+        "Total Charges ($)", min_value=0.0, max_value=10000.0,
+        value=float(st.session_state["total_charges"])
+    )
+
+# Section 3: Services
+st.markdown(" ")
+st.subheader("Services")
+
+security_options = ["Yes", "No", "No internet service"]
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    streaming_tv = st.selectbox(
+        "TV Streaming", security_options,
+        index=security_options.index(st.session_state["streaming_tv"])
+    )
     phone_service = st.selectbox(
         "Phone Service", ["Yes", "No"],
         index=["Yes", "No"].index(st.session_state["phone_service"])
     )
+with col2:
+    streaming_movies = st.selectbox(
+        "Movies Streaming", security_options,
+        index=security_options.index(st.session_state["streaming_movies"])
+    )
     multiple_lines = st.selectbox(
-        "Multiple Lines",
-        ["No", "Yes", "No phone service"],
+        "Multiple Lines", ["No", "Yes", "No phone service"],
         index=["No", "Yes", "No phone service"].index(st.session_state["multiple_lines"])
     )
+with col3:
     internet_service = st.selectbox(
-        "Internet Service",
-        ["DSL", "Fiber optic", "No"],
+        "Internet Service", ["DSL", "Fiber optic", "No"],
         index=["DSL", "Fiber optic", "No"].index(st.session_state["internet_service"])
     )
-
-    security_options = ["Yes", "No", "No internet service"]
     online_security = st.selectbox(
         "Online Security", security_options,
         index=security_options.index(st.session_state["online_security"])
@@ -149,60 +178,46 @@ with col2:
         if value == online_security:
             default = i
 
-    online_backup = st.selectbox(
-        "Online Backup", security_options,
-        index=security_options.index(st.session_state["online_backup"])
-    )
-    device_protection = st.selectbox(
-        "Device Protection", security_options,
-        index=security_options.index(st.session_state["device_protection"])
-    )
-    tech_support = st.selectbox(
-        "Tech Support", security_options,
-        index=security_options.index(st.session_state["tech_support"])
-    )
-    streaming_tv = st.selectbox(
-        "TV Streaming", security_options,
-        index=security_options.index(st.session_state["streaming_tv"])
-    )
-    streaming_movies = st.selectbox(
-        "Movies Streaming", security_options,
-        index=security_options.index(st.session_state["streaming_movies"])
-    )
-
-with col3:
-    st.subheader("Billing")
-    monthly_charges = st.number_input(
-        "Monthly Charges ($)",
-        min_value=0.0, max_value=200.0,
-        value=float(st.session_state["monthly_charges"])
-    )
-    total_charges = st.number_input(
-        "Total Charges ($)",
-        min_value=0.0, max_value=10000.0,
-        value=float(st.session_state["total_charges"])
-    )
-    gender = st.selectbox(
-        "Gender", ["Male", "Female"],
-        index=["Male", "Female"].index(st.session_state["gender"])
-    )
-    senior_citizen = st.selectbox(
-        "Senior Citizen", ["No", "Yes"],
-        index=["No", "Yes"].index(st.session_state["senior_citizen"])
-    )
-    partner = st.selectbox(
-        "Has Partner", ["Yes", "No"],
-        index=["Yes", "No"].index(st.session_state["partner"])
-    )
-    dependents = st.selectbox(
-        "Has Dependents", ["Yes", "No"],
-        index=["Yes", "No"].index(st.session_state["dependents"])
-    )
+# Section 4: Additional (hidden by default)
+st.markdown(" ")
+with st.expander("Additional customer details (optional)"):
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        gender = st.selectbox(
+            "Gender", ["Male", "Female"],
+            index=["Male", "Female"].index(st.session_state["gender"])
+        )
+        partner = st.selectbox(
+            "Has Partner", ["Yes", "No"],
+            index=["Yes", "No"].index(st.session_state["partner"])
+        )
+        tech_support = st.selectbox(
+            "Tech Support", security_options,
+            index=security_options.index(st.session_state["tech_support"])
+        )
+    with col2:
+        senior_citizen = st.selectbox(
+            "Senior Citizen", ["No", "Yes"],
+            index=["No", "Yes"].index(st.session_state["senior_citizen"])
+        )
+        online_backup = st.selectbox(
+            "Online Backup", security_options,
+            index=security_options.index(st.session_state["online_backup"])
+        )
+    with col3:
+        dependents = st.selectbox(
+            "Has Dependents", ["Yes", "No"],
+            index=["Yes", "No"].index(st.session_state["dependents"])
+        )
+        device_protection = st.selectbox(
+            "Device Protection", security_options,
+            index=security_options.index(st.session_state["device_protection"])
+        )
 
 st.divider()
 
+# Predict
 if st.button("Predict Churn Risk", type="primary"):
-    # training features
     input_data = {
         'tenure': tenure,
         'MonthlyCharges': monthly_charges,
