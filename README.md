@@ -62,9 +62,8 @@ Steps performed:
 
 Models tested:
 - Logistic Regression
-<!-- - Random Forest
-- Decision Tree
-- XGBoost *(optional if used)* -->
+- Random Forest
+- XGBoost
 
 ### Evaluation Metrics
 - Accuracy
@@ -75,14 +74,13 @@ Models tested:
 
 ## Results
 
-<!-- | Model | Accuracy |
+| Model | Accuracy | Precision | Recall | F1 | ROC-AUC
 |------|------|
-| Logistic Regression | 80% |
-| Random Forest | 82% |
-| Decision Tree | 76% | -->
+| Logistic Regression | 80% | 65% | 55% | 59% | 84 %
+| Random Forest | 79% | 63% | 50% | 56% | 82%
+| XGBoost | 78% | 60% | 51% | 55% | 82%
 
-<!-- > Random Forest achieved the best overall performance for churn prediction. -->
-
+Logistic regresion achieved the best overall performance for churn prediction.
 
 
 ## 🚀 How to Run the Project
@@ -90,29 +88,35 @@ Models tested:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/telco-churn-prediction.git
-cd telco-churn-prediction
+git clone https://github.com/huif4ng/customer-churn-prediction.git
 ```
 
-### Install Dependencies
+### 2. Download the dataset and place them in `data/` folder.
+
+### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
 ## Repository Structure
 ```bash
-telco-churn-prediction/
+customer-churn-prediction/
 │
 ├── data/
-│   └── WA_Fn-UseC_-Telco-Customer-Churn.csv
+│   └── data.csv
+│   └── sample_data.csv
+│   
+├── models/
+│   └── churn_model.pkl
+│   └── feature_names.pkl
+│   └──scaler.pkl
 │
 ├── notebooks/
-│   └── Telco_Churn_Prediction.ipynb
-│
-├── images/
-│   └── charts.png
+│   └── 01_eda.ipynb
+│   └── 02_models.ipynb
 │
 ├── requirements.txt
 ├── README.md
 └── .gitignore
+├── app.py
 ```
