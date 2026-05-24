@@ -1,6 +1,8 @@
 # Customer Churn Prediction
 This project predicts customer churn for a telecom company using the Telco Customer Churn dataset from Kaggle. The goal is to identify customers who are likely to leave the subscription service and understand the factors influencing churn.
 
+**Live demo:** https://customer-churn-prediction-6zstndtghehdbenswghz7m.streamlit.app/
+
 ## Project Overview
 Customer churn is one of the biggest challenges for subscription-based businesses.  
 In this project, I built a machine learning model to predict whether a customer will churn based on demographic information, account details, and service usage.
