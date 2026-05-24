@@ -18,12 +18,6 @@ def load_model():
 
 pipeline, feature_names = load_model()
 
-@st.cache_data
-def load_sample():
-    return pd.read_csv('data/sample_data.csv')
-
-sample_df = load_sample()
-
 # profile preset
 LOW_RISK_PROFILE = {
     "tenure": 48,
